@@ -1,0 +1,691 @@
+\documentclass[10pt]{article}
+\usepackage[spanish, es-tabla]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{nccmath}
+\usepackage{cancel}
+\usepackage[siunitx]{circuitikz}
+\usepackage[left=3.5cm,top=3.5cm,right=2.5cm,bottom=2.5cm]{geometry} 
+
+
+\begin{document}
+	\begin{titlepage}
+		\begin{center}
+			\fontsize{13pt}{15pt}
+			{\selectfont UNIVERSIDAD DE CASTILLA - LA MANCHA} \\
+			\bigskip
+			\smallskip
+			{\selectfont ESCUELA TÉCNICA SUPERIOR \\ \smallskip
+				DE INGENIEROS INDUSTRIALES}	\\	
+			\bigskip
+			\medskip
+			{\selectfont INGENIERÍA ELÉCTRICA, ELECTRÓNICA}\\ \smallskip
+			{\selectfont AUTOMÁTICA Y COMUNICACIONES}\\
+			\bigskip
+			\bigskip
+			\bigskip
+			\bigskip
+			\fontfamily{ptm}
+			\fontseries{sb}\fontsize{15pt}{17pt}
+			{\selectfont Ricardo Camacho Díaz-Cano} \\ \medskip
+			{\selectfont Pedro Antonio Estévez Pérez} \\ \medskip
+			{\selectfont Fernando de la Cruz Díaz} \\ \medskip
+			{\selectfont Alberto García-Fogeda Gómez} \\ \medskip
+			\bigskip
+			\bigskip
+			\bigskip
+			\bigskip
+			\bigskip
+			\bigskip
+			\fontseries{bx}\fontsize{20pt}{22pt}
+			\textrm{ Memoria de prácticas } \\ \bigskip
+			\bigskip
+			\bigskip
+			\bigskip
+			\bigskip
+			\bigskip
+			\bigskip
+			\fontseries{bx}\fontsize{15pt}{17}
+			\textrm{Área de Conocimiento}\\ \smallskip \smallskip
+			\fontseries{m}\fontsize{15pt}{17}
+			\textrm{Electrónica de Potencia}\\ \bigskip
+			\fontseries{bx}\fontsize{15pt}{17}
+			\textrm{Departamento}\\ \smallskip \smallskip
+			\fontseries{m}\fontsize{15pt}{17}
+			\textrm{Ingeniería Eléctrica, Electrónica,}\\ \smallskip
+			\textrm{Automática y Comunicaciones}\\ \smallskip \smallskip
+			\textrm{Escuela Técnica Superior de Ingenieros\\ \smallskip Industriales.}\\ \smallskip \smallskip \smallskip
+			\textrm{Universidad de Castilla - La Mancha}	    
+		\end{center}
+	\end{titlepage}
+	\tableofcontents
+	\listoffigures
+	\newpage
+	
+	\section{Chopper de Cuk. Simulación.}
+	
+	\begin{center}
+		\begin{figure}[H]
+			\begin{circuitikz}
+				
+				% Creación de componentes
+				\draw (0,4) to[battery, a=$V_d$] (0,0);
+				\draw (0,4) to[L, i>^=$i_{L_1}$, l=$L_1$,-*] (3,4) to[C,i^=$i_{C_1}$, l=$C_1$,-*] (6,4) to[L,i<^=$i_{L_2}$, l=$L_2$,-*] (9,4) -- (12,4) to [R,a=$R_L$, l= $V_o$] (12,0) -- (0,0);
+				\draw (3,2) node[npn] (npn1) {};
+				\draw (npn1.E) -- (3,0);
+				\draw (npn1.C) -- (3,4);
+				\draw (6,4) to[full diode,l = $D$, -*] (6,0);
+				\draw (9,4) to[C,i>^=$i_{C_2}$, l = $C_2$, -*] (9,0);
+				\draw (3,0) to [short,*-] (3,0);
+				
+				%Creación de etiquetas
+				\draw (3,2) node[left=8mm]{$T$};
+				\draw (12,3.8) node[right=2mm]{$-$};
+				\draw (12,0.2) node[right=2mm]{$+$};
+			
+			\end{circuitikz}\caption{Chopper de Cuk}
+		\end{figure}	
+	\end{center}
+	
+	Primero se resuelve el circuito analíticamente teniendo en cuenta las caídas de tensión tanto en el diodo como en el interruptor. Cuando el interruptor está en ON, el diodo está en OFF y viceversa.
+	
+	\paragraph{Circuito en ON} 
+	
+	\begin{center}
+		\begin{figure}[H]
+			\begin{circuitikz}
+				
+				% Creación de componentes
+				\draw (0,4) to[battery,i^=$i_d$, a=$V_d$] (0,0);
+				\draw (0,4) to[L,i>^=$i_{L_1}$,a=$V_{L_1}$, l=$L_1$,-*] (3,4) to[C,i^=$i_{C_1}$, a=$V_{C_1}$, l=$C_1$] (6,4) to[L,i<^=$i_{L_2}$, a=$V_{L_2}$, l=$L_2$,-*] (9,4) -- (12,4) to [R, i<^=$I_o$,a=$R_L$, l= $V_o$] (12,0) -- (0,0);
+				\draw (3,4) -- (3,0);
+				\draw (9,4) to[C, i>^=$i_{C_2}$,a = $C_2$, l=$V_{C_2}$, -*] (9,0);
+				\draw (3,0) to [short,*-] (3,0);
+				
+				%Creación de etiquetas
+				\draw (12,3.8) node[right=2mm]{$-$};
+				\draw (12,0.2) node[right=2mm]{$+$};
+				
+				\draw (3,1.7) node[right=1mm]{$-$};
+				\draw (3,1.7) to [short,*-] (3,1.7);
+				\draw (3,2.3) node[right=1mm]{$+$};
+				\draw (3,2.3) to [short,*-] (3,2.3);
+				\draw (3,2) node[left=2mm]{$V_T$};
+				
+				\draw (0,2.5) node[left=1mm]{$+$};
+				\draw (0,1.5) node[left=1mm]{$-$};
+				
+				\draw (1,4) node[below=1mm]{$+$};
+				\draw (2,4) node[below=1mm]{$-$};
+				
+				\draw (4,4) node[below=1mm]{$+$};
+				\draw (5,4) node[below=1mm]{$-$};
+				
+				\draw (7,4) node[below=1mm]{$-$};
+				\draw (8,4) node[below=1mm]{$+$};
+				
+				\draw (9,2.5) node[right=1mm]{$+$};
+				\draw (9,1.5) node[right=1mm]{$-$};
+				
+			\end{circuitikz}\caption{Chopper de Cuk. Circuito en ON}
+		\end{figure}	
+	\end{center}
+	
+	$V_{L_1} = V_d - V_T\smallskip$
+	
+	$V_{L_2} = V_{C_1} - V_T - V_O\bigskip$
+	
+	\newpage
+	\paragraph{Circuito en OFF}
+
+	\begin{center}
+		\begin{figure}[H]
+			\begin{circuitikz}
+				
+				% Creación de componentes
+				\draw (0,4) to[battery,i^=$i_d$, a=$V_d$] (0,0);
+				\draw (0,4) to[L,i>^=$i_{L_1}$,a=$V_{L_1}$, l=$L_1$] (3,4) to[C,i>^=$i_{C_1}$, a=$V_{C_1}$, l=$C_1$,-*] (6,4) to[L,i<^=$i_{L_2}$, a=$V_{L_2}$, l=$L_2$,-*] (9,4) -- (12,4) to [R, i<^=$I_o$,a=$R_L$, l= $V_o$] (12,0) -- (0,0);
+				\draw (9,4) to[C, i>^=$i_{C_2}$,a = $C_2$, l=$V_{C_2}$, -*] (9,0);
+				\draw (6,4) -- (6,0);
+				\draw (6,0) to [short,*-] (6,0);
+				
+				%Creación de etiquetas
+				\draw (6,1.7) node[right=1mm]{$-$};
+				\draw (6,1.7) to [short,*-] (6,1.7);
+				\draw (6,2.3) node[right=1mm]{$+$};
+				\draw (6,2.3) to [short,*-] (6,2.3);
+				\draw (6,2) node[left=2mm]{$V_D$};
+				
+				\draw (12,3.8) node[right=2mm]{$-$};
+				\draw (12,0.2) node[right=2mm]{$+$};
+				
+				\draw (0,2.5) node[left=1mm]{$+$};
+				\draw (0,1.5) node[left=1mm]{$-$};
+				
+				\draw (1,4) node[below=1mm]{$+$};
+				\draw (2,4) node[below=1mm]{$-$};
+				
+				\draw (4,4) node[below=1mm]{$+$};
+				\draw (5,4) node[below=1mm]{$-$};
+				
+				\draw (7,4) node[below=1mm]{$-$};
+				\draw (8,4) node[below=1mm]{$+$};
+				
+				\draw (9,2.5) node[right=1mm]{$+$};
+				\draw (9,1.5) node[right=1mm]{$-$};
+				
+			\end{circuitikz}\caption{Chopper de Cuk. Circuito en OFF}
+		\end{figure}	
+	\end{center}
+
+	$V_{L_1} = V_d - V_{C_1} - V_D\smallskip$
+	
+	$V_{L_2} = -V_o - V_D\bigskip$
+	
+	Aplicamos que los valores medios de tensión por las bobinas tienen que ser cero para hallar la tensión de salida en función de la de entrada.
+	
+	$$\bullet\ V_{L_1}=0\ \rightarrow\ \frac{1}{T_s}\int_{0}^{T_s}V_{L_1}\ dt= \frac{1}{T_s}\int_{0}^{t_{on}}(V_d-V_T)\ dt + \frac{1}{T_s}\int_{t_{on}}^{T_s}(V_d-V_{C_1}-V_D)\ dt=0$$
+	
+	$$(V_d-V_T)D + (V_d-V_{C_1}-V_D)(1-D) = 0$$
+	
+	$$V_{C_1} = \frac{V_d-V_D(1-D)-V_TD}{1-D}\bigskip$$
+	
+	$$\bullet\ V_{L_2} = 0 \ \rightarrow\ \frac{1}{T_s}\int_{0}^{T_s}V_{L_2}\ dt= \frac{1}{T_s}\int_{0}^{t_{on}}(V_{C_1}-V_T-V_o)\ dt +\frac{1}{T_s}\int_{t_{on}}^{T_s}(-V_o-V_D)=0$$
+	
+	$$(V_{C_1}-V_T-V_o)D+(-V_o-V_D)(1-D)=0$$	
+	
+	$$V_o=V_{C_1}D-V_TD-V_D(1-D)\bigskip$$
+	
+	Despejando el segundo resultado con el primero, obtenemos la expresión de la tensión de salida.
+	
+	$$V_o=\frac{V_dD-V_D(D(1-D)+(1-D)^2)-V_T(D^2+D(1-D))}{1-D}\bigskip$$
+	
+	
+	\newpage
+	Conocemos todos los valores necesarios para despejar la tensión de salida:
+	
+	$$V_o=\frac{25\cdot 0.6-0.7\cdot(0.6\cdot(1-0.6)+(1-0.6)^2)-0.2\cdot(0.6^2-0.6\cdot(1-0.6))}{(1-0.6)}= 36.74\ V$$
+	
+	Si miramos los datos obtenidos en la simulación podemos comprobar que el resultado es correcto. La tensión sale negativa por haber escogido la polaridad contraria.
+	
+	\begin{figure}[H]
+		\begin{center}
+			\includegraphics[scale=0.8]{cuk_simulacion_salida.png}
+		\end{center}\caption{Tensión de salida}
+	\end{figure}
+	
+	Se procede ahora a calcular los rizados de corriente en las bobinas.
+	
+	$$\bullet\ \Delta{i_{L_1}}=\frac{1}{L_1}\int_{0}^{t_{on}}V_{L_1}\ dt=\frac{1}{L_1}\int_{0}^{t_{on}}(V_d-V_T)\ dt= \frac{(V_d-V_T)D}{L_1\cdot f_s}= 0.372\ A$$
+	
+	$$\bullet \Delta{i_{L_1}}= \left|\frac{1}{L_1}\int_{t_{on}}^{T_s}V_{L_1}\ dt\right|=\left|\frac{1}{L_1}\int_{t_{on}}^{T_s}(V_d-V_{C_1}-V_D)\ dt\right|= \frac{(V_d-V_{C_1}-V_D)(D-1)}{L_1\cdot f_s}=0.372\ A\bigskip$$
+	
+	$$\bullet\ \Delta{i_{L_2}}=\frac{1}{L_2}\int_{0}^{t_{on}}V_{L_2}\ dt=\frac{1}{L_2}\int_{0}^{t_{on}}(V_{C_1}-V_T-V_D)\ dt= \frac{(V_{C_1}-V_T-V_o)D}{L_2\cdot f_s}= 0.3684\ A$$
+	
+	$$\bullet \Delta{i_{L_2}}= \left|\frac{1}{L_2}\int_{t_{on}}^{T_s}V_{L_2}\ dt\right|=\left|\frac{1}{L_2}\int_{t_{on}}^{T_s}(-V_o-V_D)\ dt\right|= \frac{(-V_o-V_D)(D-1)}{L_2\cdot f_s}= 0.3744\ A$$
+	
+	Se puede observar que los valores para el $t_{on}$ y el $t_{off}$ coinciden con una variación de una pocas centésimas debido a los decimales.
+	
+	Para comprobar estos valores con PSCAD dibujaremos las corrientes para cada bobina, viendo su máximo y su mínimo para poder hallar los rizados de corriente.
+	
+	\begin{figure}[H]
+		\begin{center}
+			\includegraphics[scale=0.8]{cuk_simulacion_bobina1.png}
+		\end{center}\caption{Corriente por la bobina $L_1$}
+	\end{figure}
+	
+	A grandes rasgos, podemos observar que $I_{L_1max}=2.9$ y $I_{L_1min}=2.55$, luego $\Delta{i{L_1}} = I_{L_1max} - I_{L_1min} = 0.35\ A$, que es aproximadamente el resultado obtenido teóricamente.
+
+	\begin{figure}[H]
+		\begin{center}
+			\includegraphics[scale=0.8]{cuk_simulacion_bobina2.png}
+		\end{center}\caption{Corriente por la bobina $L_2$}
+	\end{figure}
+
+	Del mismo modo, podemos observar que $I_{L_1max}=2$ y $I_{L_1min}=1.65$, luego $\Delta{i_{L_1}} = I_{L_1max} - I_{L_1min} = 0.35\ A$, que es aproximadamente el resultado obtenido teóricamente.
+	
+	\newpage
+	
+	\section{Chopper de Cuk. Equipo.}
+	
+	\begin{center}
+		\begin{figure}[H]
+			\begin{circuitikz}
+				
+				% Creación de componentes
+				\draw (0,4) to[battery, a=$V_d$] (0,0);
+				\draw (0,4) to[L, i>^=$i_{L_1}$, l=$L_1$,-*] (3,4) to[C,i^=$i_{C_1}$, l=$C_1$,-*] (6,4) to[L,i<^=$i_{L_2}$, l=$L_2$,-*] (9,4) -- (12,4) to [R,a=$R_L$, l= $V_o$] (12,0) -- (0,0);
+				\draw (3,2) node[npn] (npn1) {};
+				\draw (npn1.E) -- (3,0);
+				\draw (npn1.C) -- (3,4);
+				\draw (6,4) to[full diode,l = $D$, -*] (6,0);
+				\draw (9,4) to[C,i>^=$i_{C_2}$, l = $C_2$, -*] (9,0);
+				\draw (3,0) to [short,*-] (3,0);
+				
+				%Creación de etiquetas
+				\draw (3,2) node[left=8mm]{$T$};
+				\draw (12,3.8) node[right=2mm]{$-$};
+				\draw (12,0.2) node[right=2mm]{$+$};
+				
+			\end{circuitikz}\caption{Chopper de Cuk}
+		\end{figure}	
+	\end{center}
+	
+	En vez de volver a analizar el circuito entero para hallar las expresiones, podemos utilizar las obtenidas anteriormente y sustituir $V_D=0$ y $V_T=0$. Los resultados obtenidos deberán ser los mismos que los vistos en teoría pues ahí también hicimos la suposición de que no había caídas de tensión ni en el diodo ni en el interruptor. De esta forma:
+	
+	$$V_o=\frac{V_dD-V_D(D(1-D)+(1-D)^2)-V_T(D^2+D(1-D))}{1-D}\ \rightarrow\ V_o=\frac{V_dD}{1-D}$$
+
+	\begin{itemize}
+		\item Tensión de entrada medida con el multímetro: $V_d=13.94\ V$
+		\item $F=min\ \rightarrow\ f=16.075\ KHz$. $F=max\ \rightarrow\ f=26.0812\ KHz$.
+		\item $V_{C_1}=min\ \rightarrow\ V_o=2.29\ V$. $V_{C_1}=max\ \rightarrow\ V_o=9.25\ V$.
+		\item Con $F$ y $V_{C_1}$ al máximo, $V_o=9.25\ V$ y $I_o=0.375\ A$.
+	\end{itemize}
+
+	Como conocemos el valor de la tensión de entrada así como los de salida, podemos calcular los márgenes de variación de D con la ecuación obtenida en el primer paso, de forma que: $0.1411\leq D \leq 0.3988$ para $2.29\leq V_o\leq 9.25$ respectivamente. Como tenemos el potenciómetro $V_{C_1}$ al máximo, sabemos directamente que estamos en el caso en el que $V_o=9.25$ y $D=0.3988$. 
+
+	\begin{figure}[H]
+		\begin{center}
+			\includegraphics[scale=0.75]{cuk_equipo_tensionL1}
+			\includegraphics[scale=0.75]{cuk_equipo_tensionL2}
+		\end{center}\caption{Tensiones en las bobinas $L_1$ y $L_2$ respectivamente}
+	\end{figure}
+	
+	\begin{figure}[H]
+		\begin{center}
+			\includegraphics[scale=0.8]{cuk_equipo_corrienteL2}
+		\end{center}\caption{Corriente por la bobina $L_{2A}$}
+	\end{figure}
+	
+	\begin{figure}[H]
+		\begin{center}
+			\includegraphics[scale=0.8]{cuk_equipo_corrienteC}
+						\includegraphics[scale=0.8]{cuk_equipo_corrienteC2}
+		\end{center}\caption{Corriente por el condensador de $470\ \mu F$ con el conmutador en posición $L_1$ y $L_{1A}$ respectivamente}
+	\end{figure}
+
+	Se observa una disminución en el rizado de corriente por el condensador, de lo que podemos concluir que éste depende del valor de $L_{1A}$. Ocurre que el núcleo magnético de esta bobina es mucho mayor que la de $L_1$.
+	
+	\newpage
+	
+	\section{Chopper Reductor. Simulación.}
+	
+	\begin{center}
+		\begin{figure}[H]
+			\begin{circuitikz}
+				
+				% Creación de componentes
+				\draw (0,4) to[battery, a=$V_d$] (0,0);
+				\draw (2,4) node[npn,rotate = 90] (npn1) {};
+				\draw (4,4) to[L, i>^=$i_L$, l=$L$,-*] (8,4) -- (12,4) to [R,i^=$I_R$,a=$R_L$, l= $V_o$] (12,0) -- (0,0);
+				\draw (npn1.E) -- (4,4);
+				\draw (npn1.C) -- (0,4);
+				\draw (4,0) to[full diode,l = $D$, *-*] (4,4);
+				\draw (8,4) to[C,i>^=$i_C$, l = $C$, -*] (8,0);
+				
+				%Creación de etiquetas
+				\draw (2,4) node[above=2mm]{$T$};
+				\draw (12,3.8) node[right=2mm]{$+$};
+				\draw (12,0.2) node[right=2mm]{$-$};
+				
+			\end{circuitikz}\caption{Chopper Reductor}
+		\end{figure}	
+	\end{center}
+	
+	Primero se resuelve el circuito analíticamente teniendo en cuenta las caídas de tensión tanto en el diodo como en el interruptor. Cuando el interruptor está en ON, el diodo está en OFF y viceversa.
+	
+	\paragraph{Circuito en ON} 
+	
+	\begin{center}
+		\begin{figure}[H]
+			\begin{circuitikz}
+				
+				% Creación de componentes
+				\draw (4,4) -- (0,4) to[battery,i<^=$i_d$, a=$V_d$] (0,0);
+				\draw (4,4) to[L, i>^=$i_L$, l=$L$,-*] (8,4) -- (12,4) to [R,i>^=$I_o$,a=$R_L$, l= $V_o$] (12,0) -- (0,0);
+				\draw (8,4) to[C,i>^=$i_C$, l = $C$, -*] (8,0);
+				
+				%Creación de etiquetas
+				\draw (2,4) node[above=2mm]{$V_T$};
+				\draw (12,3.8) node[right=2mm]{$+$};
+				\draw (12,0.2) node[right=2mm]{$-$};
+				
+				\draw (1.5,4) node[below=2mm]{$+$};
+				\draw (1.5,4) to [short,*-] (1.5,4);
+				\draw (2.5,4) node[below=2mm]{$-$};
+				\draw (2.5,4) to [short,*-] (2.5,4);
+				
+				\draw (5.5,4) node[below=2mm]{$+$};
+				\draw (6,4) node[below=2mm]{$V_L$};
+				\draw (6.5,4) node[below=2mm]{$-$};
+				
+				
+				
+			\end{circuitikz}\caption{Chopper Reductor. Circuito en ON}
+		\end{figure}	
+	\end{center}
+	
+	$V_L = V_d - V_T - V_o$
+		
+	\newpage
+	\paragraph{Circuito en OFF}
+	
+	\begin{center}
+		\begin{figure}[H]\centering
+			\begin{circuitikz}
+				
+				% Creación de componentes
+				\draw (4,4) -- (4,0);
+				\draw (4,4) to[L, i>^=$i_L$, l=$L$,-*] (8,4) -- (12,4) to [R,i>^=$I_o$,a=$R_L$, l= $V_o$] (12,0) -- (4,0);
+				\draw (8,4) to[C,i>^=$i_C$, l = $C$, -*] (8,0);
+				
+				%Creación de etiquetas
+				\draw (4,2) node[left=2mm]{$V_D$};
+				\draw (12,3.8) node[right=2mm]{$+$};
+				\draw (12,0.2) node[right=2mm]{$-$};
+				
+				\draw (4,1.5) node[left=2mm]{$+$};
+				\draw (4,1.5) to [short,*-] (4,2.5);
+				\draw (4,2.5) node[left=2mm]{$-$};
+				\draw (4,2.5) to [short,*-] (4,2.5);
+				
+				\draw (5.5,4) node[below=2mm]{$+$};
+				\draw (6,4) node[below=2mm]{$V_L$};
+				\draw (6.5,4) node[below=2mm]{$-$};
+				
+			\end{circuitikz}\caption{Chopper Reductor. Circuito en OFF}
+		\end{figure}	
+	\end{center}
+	
+	$V_L = -V_o - V_D\bigskip$
+	
+	Aplicamos que el valor medio de tensión por la bobina tiene que ser cero para hallar la tensión de salida en función de la de entrada.
+	
+	$$\bullet\ V_L=0\ \rightarrow\ \frac{1}{T_s}\int_{0}^{T_s}V_L\ dt= \frac{1}{T_s}\int_{0}^{t_{on}}(V_d-V_T-V_o)\ dt + \frac{1}{T_s}\int_{t_{on}}^{T_s}(-V_o-V_D)\ dt=0$$
+	
+	$$(V_d-V_T-V_o)D - (V_o+V_D)(1-D) = 0$$
+	
+	$$V_o=(V_d-V_T)D-V_D(1-D)\bigskip$$
+	
+	Conocemos todos los valores necesarios para despejar la tensión de salida:
+	
+	$$V_o=0.6(35-0.2)-0.7(1-0.6)= 20.6\ V$$
+	
+	Valor que coincide con el obtenido en la simulación.
+	
+	\begin{figure}[H]
+		\begin{center}
+			\includegraphics[scale=0.7]{reductor_simulacion_salida.png}
+		\end{center}\caption{Tensión de salida}
+	\end{figure}
+
+	Mediante el uso de la FFT en PSCAD podemos comprobar rápidamente que el valor medio de la tensión en la bobina es aproximadamente 0.
+	
+	\begin{figure}[H]
+		\begin{center}
+			\includegraphics[scale=0.7]{reductor_simulacion_media.png}
+		\end{center}\caption{Tensión media en la bobina}
+	\end{figure}
+	
+	Se procede ahora a calcular el rizado de corriente en la bobina.
+	
+	$$\bullet\ \Delta{i_L}=\frac{1}{L}\int_{0}^{t_{on}}V_L\ dt=\frac{1}{L}\int_{0}^{t_{on}}(V_d-V_T-V_o)\ dt= \frac{(V_d-V_T-V_o)D}{L\cdot f_s}= 0.426\ A$$
+	
+	$$\bullet \Delta{i_L}= \left|\frac{1}{L}\int_{t_{on}}^{T_s}V_L\ dt\right|=\left|\frac{1}{L}\int_{t_{on}}^{T_s}(-V_o-V_D)\ dt\right|= \frac{(V_o+V_D)(1-D)}{L\cdot f_s}=0.426\ A\bigskip$$
+	
+	Para comprobar estos valores con PSCAD dibujaremos la corrientes por la bobina, viendo su máximo y su mínimo para poder hallar el rizado de corriente.
+	
+	\begin{figure}[H]
+		\begin{center}
+			\includegraphics[scale=0.8]{reductor_simulacion_bobina.png}
+		\end{center}\caption{Corriente por la bobina $L$}
+	\end{figure}
+	
+	A grandes rasgos, podemos observar que $I_{L{max}}=0.9$ y $I_{L{min}}=0.5$, luego $\Delta{i_L} = I_{L{max}} - I_{L{min}} = 0.4\ A$, que es aproximadamente el resultado obtenido teóricamente.
+	
+	Se procede ahora a calcular el rizado de tensión en el condensador, que es el mismo que el de salida.
+	
+	$$\Delta{V_o}= \frac{1}{C}\int_{t_1}^{t_2}i_c\ dt= \frac{1}{C}\frac{1}{2}\frac{\Delta{i_L}}{2}(t_2-t_1)$$
+	
+	Tenemos que encontrar el valor de $(t_2-t_1)$ para poder despejar esa ecuación. Lo hallaremos a través de la corriente por el condensador, pues su valor medio tiene que ser cero.
+	
+	$$I_C=0\ \rightarrow\ \frac{1}{T_s}\int_{0}^{T_s}i_C\ dt= \frac{1}{T_s}\int_{0}^{t_1}i_C\ dt+\frac{1}{T_s}\int_{0}^{t_2}i_C\ dt= $$
+	
+	$$=\frac{1}{T_s}\left[\frac{1}{2}\frac{-\Delta{i_L}}{2}t_1+\frac{1}{2}\frac{\Delta{i_L}}{2}(t_2-t_1)+\frac{1}{2}\frac{-\Delta{i_L}}{2}(T_s-t_2)\right]$$
+	
+	$$t_2-t_1=\frac{T_s}{2}$$
+	
+	Con este dato, podemos volver a la ecuación anterior y despejar finalmente el rizado de tensión por el condensador.
+	
+	$$\Delta V_o=\frac{\Delta{i_L}}{4C}\frac{T_s}{2}=\frac{(V_o+V_D)(1-D)}{8CLf_S^2}= 0.00566\ V$$
+	
+	Para comprobarlo con PSCAD realizaremos el mismo proceso que con el rizado de corriente por la bobina.
+	
+	\begin{figure}[H]
+		\begin{center}
+			\includegraphics[scale=0.8]{reductor_simulacion_salidarizado.png}
+		\end{center}\caption{Tensión por el condensador $C$}
+	\end{figure}
+
+	A grandes rasgos, podemos observar que $V_{Cmax}=20.5955$ y $V_{Cmin}=20.5899$, luego $\Delta{V_o} = V_{Cmax} - V_{Cmin} = 0.0056\ V$, que es aproximadamente el resultado obtenido teóricamente.
+	
+	\newpage
+
+	Por último, en el límite entre conducción contínua y discontínua tenemos que: 
+	
+	$$I_L=\frac{\Delta{i_L}}{2}$$
+	
+	$\Delta{i_L}$ ya lo hemos calculado anteriormente, sólo falta calcular el valor medio de corriente por la bobina.
+	
+	$$I_L=\frac{1}{T_s}\int_{0}^{T_s}i_L\ dt=\frac{1}{T_S}\int_{0}^{T_s}(i_C+I_o)\ dt=\frac{1}{T_s}\int_{0}^{T_s}i_C\ dt+\frac{1}{T_s}\int_{0}^{T_s}I_o\ dt=I_o=\frac{V_o}{R}$$
+	
+	Sustituyendo en la ecuación superior:
+	
+	$$\frac{V_o}{R}=\frac{\Delta i_L}{2}\ \rightarrow\ \frac{V_o}{R}=\frac{(V_o+V_D)(1-D)}{2Lf_s}\ \rightarrow\ L=\frac{(V_o+\cancel{V_D})(1-D)R}{2V_of_s}=0.3\ mH$$
+	
+	\newpage
+
+	\section{Chopper Reductor. Equipo}
+
+	\begin{center}
+		\begin{figure}[H]
+			\begin{circuitikz}
+				
+				% Creación de componentes
+				\draw (0,4) to[battery, a=$V_d$] (0,0);
+				\draw (2,4) node[npn,rotate = 90] (npn1) {};
+				\draw (4,4) to[L, i>^=$i_L$, l=$L$,-*] (8,4) -- (12,4) to [R,i^=$I_R$,a=$R_L$, l= $V_o$] (12,0) -- (0,0);
+				\draw (npn1.E) -- (4,4);
+				\draw (npn1.C) -- (0,4);
+				\draw (4,0) to[full diode,l = $D$, *-*] (4,4);
+				\draw (8,4) to[C,i>^=$i_C$, l = $C$, -*] (8,0);
+				
+				%Creación de etiquetas
+				\draw (2,4) node[above=2mm]{$T$};
+				\draw (12,3.8) node[right=2mm]{$+$};
+				\draw (12,0.2) node[right=2mm]{$-$};
+				
+			\end{circuitikz}\caption{Chopper Reductor}
+		\end{figure}	
+	\end{center}
+
+	Al igual que en el caso anterior, podemos utilizar las expresiones obtenidas anteriormente y sustituir $V_D=0$ y $V_T=0$. Los resultados obtenidos deberán ser los mismos que los vistos en teoría pues ahí también hicimos la suposición de que no había caídas de tensión ni en el diodo ni en el interruptor. De esta forma:
+
+	$$V_o=(V_d-V_T)D-V_D(1-D)\ \rightarrow\ V_o=V_dD\medskip$$
+	
+	Siendo el valor de la tensión de entrada, medido con el multímetro, de $36\ V$.
+	
+	\paragraph{Estudio en lazo abierto}
+	
+	\begin{itemize}
+		\item $F=min\ \rightarrow\ f=16.097\ KHz$. $F=max\ \rightarrow\ f=26.45\ KHz$.
+		\item $V_{C_1}=min\ \rightarrow\ V_o=8.77\ V$. $V_{C_1}=max\ \rightarrow\ V_o=16.17\ V$.
+		\item Con $F$ de forma que $V_o=15\ V$, $V_o=15.5\ V$ e $I_o=0.612\ A$.
+	\end{itemize}
+
+	En este caso, tenemos los potenciómetros situados de forma que a la salida tenemos una tensión que no es ni la máxima ni la mínima, luego no sabemos de antemano el valor del factor de servicio por lo que hemos de calcularlo. En este caso, podemos utilizar su definición y las medidas obtenidas por el osciloscopio.
+	
+	\begin{figure}[H]
+		\begin{center}
+			\includegraphics[scale=0.7]{factor_de_servicio}
+		\end{center}\caption{Onda usada para la obtención del factor de servicio.}
+	\end{figure}
+
+	$$D = \frac{t_{on}}{T_s}= \frac{17.35}{37.89}=0.4579\ \rightarrow\ V_o=V_dD=36\cdot 0.4579=16.48\ V\medskip$$
+	
+	Que es aproximadamente el valor previamente establecido. 
+	
+	Por último, las formas de onda del resto de componentes.
+	
+	\begin{figure}[H]
+		\begin{center}
+			\includegraphics[scale=0.8]{apartado_f}
+			\includegraphics[scale=0.8]{apartado_g}
+		\end{center}\caption{Formas de onda de la tensión y corriente en la bobina, respectivamente.}
+	\end{figure}
+
+	\begin{figure}[H]
+		\begin{center}
+			\includegraphics[scale=0.8]{apartado_h}
+		\end{center}\caption{Formas de onda de la corriente en el condensador.}
+	\end{figure}
+	
+	\paragraph{Estudio en lazo cerrado}\medskip
+	
+	\begin{itemize}
+		\item	R: regulador PI/PID, donde lo único que se sabe de él es que modifica el régimen permanente, por lo que puede ser un regulador PI/PID.
+		\item	DRV: Es la señal de disparo del interruptor.
+		\item	P: Corresponde al chopper reductor.
+		\item	B: es la ganancia en lazo cerrado.
+		\item	A: es la ganancia la cual varia con el potenciómetro de F.
+	\end{itemize}
+	
+	
+	\begin{figure}[H]
+		\begin{center}
+			\includegraphics[scale=0.8]{apatadado_5_c}
+		\end{center}\caption{Diferencia entre la señal $VC_2$ y la señal proveniente del bloque $B$.}
+	\end{figure}
+
+	Se observa que la señal en $VC_2$ y la tensión del bloque $B$ son iguales, por lo que al aplicar la diferencia el resultado es cero.
+	
+	\newpage
+	
+	\section{Rectificador trifásico controlado}
+	
+	\begin{center}
+		\begin{figure}[H]
+			\begin{circuitikz}
+				
+				% Creación de componentes
+				\draw (0,0) to[full thyristor,l = $T_4$] (0,3) -- (0,5) -- (0,7) to[full thyristor,l = $T_1$] (0,10);
+				\draw (0,0) -- (8,0);
+				\draw (0,10) -- (8,10);
+				\draw (2,0) to[full thyristor,l = $T_6$, *-] (2,3) -- (2,5) -- (2,7) to[full thyristor,l = $T_3$, -*] (2,10);
+				\draw (4,0) to[full thyristor,l = $T_2$, *-] (4,3) -- (4,5) -- (4,7) to[full thyristor,l = $T_5$, -*] (4,10);
+				\draw (8,4) to[battery, l=$V_{E_d}$] (8,2) -- (8,0);
+				\draw (8,4) to[L, a=$L_d$] (8,6) to[R, a=$R_L$] (8,8) -- (8,10);			
+				
+				\draw (4,3) -- (-3,3) to[sV, a=$V_{S_C}$] (-6,3);
+				\draw (2,5) -- (-3,5) to[sV, a=$V_{S_B}$, -*] (-6,5);
+				\draw (0,7) -- (-3,7) to[sV, a=$V_{S_A}$] (-6,7);	
+				\draw (-6,3) -- (-6,7);
+				
+				\draw (4,3) to [short,*-] (4,3);
+				\draw (2,5) to [short,*-] (2,5);
+				\draw (0,7) to [short,*-] (0,7);
+				
+			\end{circuitikz}\caption{Rectificador trifásico controlado.}
+		\end{figure}	
+	\end{center}
+
+	Primero calculamos la variación del ángulo $\alpha$, ya que éste deberá variar para que la corriente de salida permanezca constante. Para ello, aplicamos la ecuación deducida en teoría que relaciona la tensión de salida con la de entrada y el ángulo $\alpha$.
+	
+	$$V_d=\frac{3\sqrt{2}}{\pi}V_{LL_{rms}}cos\alpha\ \rightarrow\ \alpha=arc cos\left[\frac{\pi}{8\sqrt{2}}\cdot\frac{V_d}{V_{LL_{rms}}}\right]$$
+	
+	Necesitamos hallar el valor de $V_d$. Mirando el circuito observamos que:
+	
+	$$V_d=I_d\cdot R_L+V_{E_d}$$
+	
+	Y sabiendo que, $I_d=20\ A$, $0\leq V_{E_d}\leq 400\ V$, tenemos que $80\leq V_d\leq 480\ V$. Para estos valores de $V_d$, $81.0315º\leq \alpha\leq 20.7162º$ respectivamente.
+	
+	En la simulación podemos comprobar que se obtienen los mismos resultados.	
+	
+	\begin{figure}[H]
+		\begin{center}
+			\includegraphics[scale=0.53]{apartado1a}
+			\includegraphics[scale=0.4]{apartado1b}
+		\end{center}\caption{Tensión $V_d$ para $\alpha=81.0315$ y $\alpha = 20.7162$.}
+	\end{figure}
+	
+	Si ahora cambiamos el valor de la f.e.m por $V_{E_d}=200\ V$, sustituyendo en la ecuación superior podemos calcular el nuevo tanto el valor del ángulo $\alpha$, como el de $V_d$, $\alpha = 56.93$, $V_d=280\ V$. Comprobándolo con la simulación:
+	
+	\begin{figure}[H]
+		\begin{center}
+			\includegraphics[scale=0.39]{apartado2a}
+		\end{center}\caption{Tensión $V_d$ para $\alpha=56.93$.}
+	\end{figure}
+
+	El valor de la corriente por la cargar $I_d$ es constante y de valor $20\ A$, comprobándolo con la simulación:
+	
+	\begin{figure}[H]
+		\begin{center}
+			\includegraphics[scale=0.39]{apartado2b}
+		\end{center}\caption{Corriente por la carga $I_d$.}
+	\end{figure}
+
+	El valor eficaz de $I_{S_A}$ se calcula como $$I_{{SA}_{RMS}}=\sqrt{\sum_{h=0}^{\infty}I^2_{{sh}_{rms}}} = \sqrt{I^2_{S1}+I^2_{S5}+I^2_{S7}+I^2_{S11}+I^2_{S13}+I^2_{S17}+I^2_{S19}+I^2_{S23}}...$$ Para calcularlos, debemos hallar los infinitos armónicos, aunque sólo emplearemos los ocho primeros, para lo cual, se monta el siguiente esquema en PSCAD:
+	
+	\begin{figure}[H]
+		\begin{center}
+			\includegraphics[scale=0.7]{armonicos}
+		\end{center}\caption{Ocho primeros armónicos de la corriente por la fase A.}
+	\end{figure}
+
+	En ese esquema, se cogen los ocho primeros armónicos, se elevan al cuadrado, se suman y finalmente se hace la raíz cuadrada para obtener el valor eficaz de la corriente por la fase. Si representamos cada uno de esos armónicos obtenemos lo siguiente:
+	
+	\begin{figure}[H]
+		\begin{center}
+			\includegraphics[scale=0.55]{armonicos2}
+		\end{center}\caption{Ocho primeros armónicos de la corriente por la fase A.}
+	\end{figure}
+	
+	Si aplicamos la ecuación superior, tenemos un valor $I_{{SA}_{RMS}}= 16.22\ A$
+	
+	Si lo comprobamos con PSCAD vemos que obtenemos el mismo valor.
+	
+	\begin{figure}[H]
+		\begin{center}
+			\includegraphics[scale=0.45]{corrienteeficaz}
+		\end{center}\caption{Corriente eficaz por la fase A.}
+	\end{figure}
+
+	Para calcular el factor de potencia, aplicamos los resultados obtenidos en teoría.
+	
+	$$PF=\frac{P_{III}}{S_{III}},\ \ \ P_{III} = V_d\cdot I_d,\ \ \ S_{III} = \sqrt{3}V_{LL}\cdot I_s$$
+	
+	Si sustituimos esas ecuaciones con los datos teóricos obtenemos un factor de potencia de 0.5457.
+	
+	Si sustituimos usando los datos obtenidos en la simulación:
+	
+	$$P_{III}=5.6\ kW,\ \ \ S_{III}=\sqrt{3}\cdot 380 \cdot 16.22 = 10.675\ kW\ \rightarrow\ PF=0.5246$$
+	
+	\begin{figure}[H]
+		\begin{center}
+			\includegraphics[scale=0.48]{factorpotencia}
+		\end{center}\caption{Factor de potencia.}
+	\end{figure}
+
+	Por último, el factor de desplazamiento se calcula de la siguiente forma:
+	$$DPF = cos \phi_1$$
+	
+	Para lo cual, necesitamos hallar el valor de $\phi_1$, que se puede despejar usando la ecuación de la potencia aparente:
+	
+	$$P_{III}=\sqrt{3}V_{{LL}_{RMS}}I_{a_{RMS}}cos\phi_1\ \rightarrow\ cos\phi_1=\frac{P_{III}}{\sqrt{3}V_{{LL}_{RMS}}I_{a_{RMS}}}=0.5246=DPF$$
+
+
+\end{document}
